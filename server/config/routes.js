@@ -8,19 +8,19 @@ module.exports = function(app){
 
 	app.get('/users', User.index);
 
-	app.post('/users/create', User.create);
+	app.post('/users', User.create);
 
 	app.get('/topics', Topic.index);
 
-	app.post('/topics/create', Topic.create);
+	app.post('/topics', Topic.create);
 
 	app.get('/posts', Post.index);
 
-	app.post('/posts/create', Post.create);
+	app.post('/posts', Post.create);
 
 	app.get('/comments', Comment.index);
 
-	app.post('/comments/create', Comment.create);
+	app.post('/comments', Comment.create);
 
 }
 

@@ -5,11 +5,107 @@
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular-route.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
 	<script>
+		var myApp = angular.module('myApp', ['ngRoute']);
 
+		myApp.config(function($routeProvider){
+			$routeProvider
+				.when('/', {
+					templateUrl: 'partials/signin.html'
+				})
+				.when('/dashboard', {
+					templateUrl: 'partials/dashboard.html'
+				})
+				.otherwise({
+					redirectTo: '/'
+				})
+		})
+
+		myApp.factory('TopicFact', function($http){
+			var topics = {};
+			topics.index = function(callback){
+				$http.get('/topics').success(callback);
+			}
+
+			return topics;
+		})
+
+		myApp.factory('UserFact', function($http){
+			var users = {};
+			users.index = function(callback){
+				$http.get('/users').success(callback);
+			}
+			users.create = function(input, callback){
+				$http.post('/users', input).success(callback);
+			}
+			return users;
+		}) 
+
+		myApp.controller('UserController', function(UserFact, $location){
+			var userfact = UserFact;
+			var self = this;
+
+			this.index = function(){
+				UserFact.index(function(data){
+					userfact.users = data;
+					self.users = userfact.users;
+				});
+			}
+
+			this.new = function(input){
+				UserFact.create(input, function(){
+					self.index();
+					$location.path('/dashboard');
+				});
+			}
+		})
+
+		myApp.controller('TopicsController', function(TopicFact){
+			var topicfact = TopicFact;
+			var self = this;
+
+			this.index = function(){
+				TopicFact.index(function(data){
+					topicfact.topics = data;
+					self.topics = topicfact.topics;
+					console.log(self.topics);
+				});
+			}
+
+			this.new = function(input){
+				TopicFact.create(input, function(){
+					self.index();
+					//
+				});
+			}
+			this.index();
+		})
 	</script>
 </head>
 <body>
-	<h1>Test</h1>
-	<div ng-view></div>
+	<div ng-controller='UserController as UC'>
+		<div ng-view=''>
+		
+		</div>
+
+		<div ng-controller='TopicsController as TC'>
+			<div>Welcome</div>
+			<table border="1">
+				<tr>
+					<th>Category</th>
+					<th>Topic</th>
+					<th>Username</th>
+					<th>Posts</th>	
+				</tr>
+				<tr ng-repeat='each in TC.topics'>
+					<td>{{each.category}}</td>
+					<td>{{each.title}}</td>
+					<td>{{each._user.name}}</td>
+					<td>{{each.posts.length}}</td>
+				</tr>
+			</table>
+			
+		</div>
+	</div>
+	
 </body>
 </html>
