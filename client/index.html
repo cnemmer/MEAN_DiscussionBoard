@@ -22,6 +22,22 @@
 					redirectTo: '/'
 				})
 		})
+// #### Post FACTORY ####
+		myApp.factory('PostFactory', function($http) {
+			var posts ={};
+
+			posts.index = function(callback) {
+				$http.get('/posts').success(callback);
+			}
+
+			posts.create = function(input, callback) {
+				console.log(input);
+				$http.post('/posts', input).success(callback)
+			}
+
+			return posts;
+		})
+
 
 // #### TOPIC FACTORY ####
 		myApp.factory('TopicFact', function($http, $routeParams){
@@ -82,21 +98,26 @@
 
 // #### TOPICS CONTROLLER ####
 		myApp.controller('TopicsController', function(TopicFact, UserFact, $routeParams, $location){
-			var topicfact = TopicFact;
+			// var topicfact = TopicFact; <--Ryan did this 
 			var self = this;
 			// console.log($location);
-			console.log($location.$$path);
-			if ($location.$$path.indexOf('topics') > 0) {
+			this.show = function() {
 				TopicFact.show(function(output) {
 					self.topic = output;
 					console.log(self.topic);
 				});
 			}
+			
+			console.log($location.$$path);
+			if ($location.$$path.indexOf('topics') > 0) {
+				this.show();
+			}
+
 
 			this.index = function(){
 				TopicFact.index(function(data){
-					topicfact.topics = data;
-					self.topics = topicfact.topics;
+					TopicFact.topics = data;
+					self.topics = TopicFact.topics;
 					console.log(self.topics);
 				});
 			}
@@ -109,6 +130,24 @@
 				});
 			}
 			this.index();
+		})
+
+		myApp.controller('PostsController', function(PostFactory, TopicFact) {
+			var self = this;
+
+			this.index = function() {
+				PostFactory.index(function(data){
+					console.log(data);
+				});
+				// PostFactory.index(TopicFact.index());
+			}
+
+			this.create = function(input, userid, topicid, callback) {
+				input._user = userid;
+				input._topic = topicid;
+				PostFactory.create(input, callback);
+
+			}
 		})
 	</script>
 </head>

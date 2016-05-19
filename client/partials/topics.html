@@ -1,5 +1,24 @@
 <div ng-controller='TopicsController as TC'>
-<p></p>
+<p>Topic :{{TC.topic.title}}</p>
+<p>Content/Descrption :{{TC.topic.content}}</p>
+<p>Category:{{TC.topic.category}}</p>
+<p>By:<a href="#">{{TC.topic._user.name}}</a></p>
+
+
+
+Post Answer Here:
+<div ng-controller="PostsController as PC">
+<form>
+	<input type="text" ng-model="newPost.content">
+	<input type="submit" ng-click="PC.create(newPost, TC.topic._user._id, TC.topic._id, TC.show)">
+</form>
+
+
+<div class='posts'>
+	<div ng-repeat='p in TC.topic.posts'>
+		<p></p>
+	</div>
+</div>
 
 
 </div>

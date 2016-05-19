@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 //_user
 //created_at
 //[posts]
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 var UserSchema = new mongoose.Schema({
 	name: String,
@@ -13,4 +14,5 @@ var UserSchema = new mongoose.Schema({
 	comments: [{type: mongoose.Schema.Types.ObjectId, ref: "Comment"}]
 })
 
+UserSchema.plugin(deepPopulate);
 var User = mongoose.model("User", UserSchema);

@@ -2,6 +2,9 @@ var mongoose = require('mongoose');
 var User = mongoose.model('User');
 
 var Topic = mongoose.model('Topic');
+var Comment = mongoose.model('Comment');
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
+// PostSchema.plugin(deepPopulate, options /* more on options below */);
 
 module.exports = {
 
@@ -48,8 +51,12 @@ module.exports = {
 			if(err){
 				console.log(err);
 			} else {
-				res.json(topic);
+				Topic.deepPopulate(topic, 'posts.comments posts._user', function (err, _posts) {
+					res.json(_posts);
+				});
 			}
-		})
+		});
 	}
 }
+
+
