@@ -14,6 +14,8 @@ module.exports = function(app){
 
 	app.post('/topics', Topic.create);
 
+	app.get('/topics/:id', Topic.show);
+
 	app.get('/posts', Post.index);
 
 	app.post('/posts', Post.create);

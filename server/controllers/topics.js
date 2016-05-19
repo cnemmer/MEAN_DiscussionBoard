@@ -40,6 +40,16 @@ module.exports = {
 				})
 			}
 		})
+	},
+	show: function(req, res) {
+		Topic.findById(req.params.id)
+		.populate('_user posts').exec(function(err, topic) {
 
+			if(err){
+				console.log(err);
+			} else {
+				res.json(topic);
+			}
+		})
 	}
 }

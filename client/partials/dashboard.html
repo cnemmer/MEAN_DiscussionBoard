@@ -1,0 +1,28 @@
+<div ng-controller='TopicsController as TC'>
+	<div>Welcome</div>
+	<table border="1">
+		<tr>
+			<th>Category</th>
+			<th>Topic</th>
+			<th>Username</th>
+			<th>Posts</th>	
+		</tr>
+		<tr ng-repeat='each in TC.topics'>
+			<td>{{each.category}}</td>
+			<td><a href="#/topics/{{each._id}}">{{each.title}}</a></td>
+			<td><a href="#/users/{{each._user._id}}">{{each._user.name}}</a></td>
+			<td>{{each.posts.length}}</td>
+		</tr>
+	</table>
+	<h3>Add a new topic</h3>
+	<form>
+		<p>Topic: <input type='text' ng-model='TC.new_topic.title'></p>
+		<p>Description: <textarea ng-model='TC.new_topic.content'></textarea></p>
+		<select ng-model='TC.new_topic.category'>
+			<option>HTML</option>
+			<option>CSS</option>
+			<option>MEAN</option>
+		</select>
+		<button ng-click='TC.new(TC.new_topic)'>Submit</button>
+	</form>
+</div>
